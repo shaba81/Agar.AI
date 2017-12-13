@@ -30,8 +30,9 @@ public class Render extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.circle(blob.getPosition().x, blob.getPosition().y, blob.getRadius());
 		
+		shapeRenderer.circle(blob.getPosition().x, blob.getPosition().y, blob.getRadius());
+
 		shapeRenderer.end();
 		batch.end();
 	}
