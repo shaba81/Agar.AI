@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,26 +23,26 @@ public class Render extends ApplicationAdapter {
 	ArrayList<Blob> blobs;
 	Blob blob;
 	OrthographicCamera camera;
-	float lerp = 1.0f; //per rendere fluido il movimento della camera e del blob. Più è alto il valore, più si muove velocemente
+	float lerp = 1.5f; //per rendere fluido il movimento della camera e del blob. Più è alto il valore, più si muove velocemente
 	
 	
-	private int numBlobs = 10;
+	private int numBlobs = 40;
 	
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 600, 400); //i valori mi dicono lo "zoom della camera".
+		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //i valori mi dicono lo "zoom della camera".
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		
-		blob = new Blob(600/2,400/2, 60);
+		blob = new Blob(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2, 60);
 		initBlobs();
 	}
 	
 	public void initBlobs() {
 		blobs = new ArrayList<Blob>(numBlobs);
 		for (int i = 0; i < numBlobs; i++) {
-			Blob b = new Blob((int) (Math.random() * 500),(int) (Math.random() * 300),(int) (Math.random() * 20));
+			Blob b = new Blob((int) (Math.random() * Gdx.graphics.getWidth()),(int) (Math.random() * Gdx.graphics.getHeight()),(int) (Math.random() * 20));
 			System.out.println(b.getX());
 			blobs.add(b);
 		}
@@ -65,6 +66,7 @@ public class Render extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.BLUE);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		
 		moveBlob();
