@@ -6,6 +6,7 @@ import java.util.Vector;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -19,11 +20,15 @@ public class Render extends ApplicationAdapter {
 	ShapeRenderer shapeRenderer;
 	ArrayList<Blob> blobs;
 	Blob blob;
+	OrthographicCamera camera;
+	
 	
 	private int numBlobs = 10;
 	
 	@Override
 	public void create () {
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, 600, 400); //i valori mi dicono lo "zoom della camera".
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		
@@ -34,10 +39,17 @@ public class Render extends ApplicationAdapter {
 	public void initBlobs() {
 		blobs = new ArrayList<Blob>(numBlobs);
 		for (int i = 0; i < numBlobs; i++) {
-			Blob b = new Blob((int) Math.random() * 500,(int) Math.random() * 300,(int) Math.random() * 30);
+			Blob b = new Blob((int) (Math.random() * 500),(int) (Math.random() * 300),(int) (Math.random() * 20));
+			System.out.println(b.getX());
 			blobs.add(b);
 		}
-		System.out.println(blobs.size());
+	}
+	
+	public void moveBlob() {
+		blob.setX(Gdx.input.getX());
+		blob.setY(Gdx.graphics.getHeight() - Gdx.input.getY());
+		camera.position.set(blob.getX(), blob.getY(), 0);
+		camera.update();
 	}
 
 	@Override
@@ -46,6 +58,9 @@ public class Render extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		
+		moveBlob();
 		
 		shapeRenderer.circle(blob.getX(), blob.getY(), blob.getRadius());
 		
