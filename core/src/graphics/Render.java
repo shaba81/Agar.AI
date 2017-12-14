@@ -1,6 +1,7 @@
 package graphics;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Vector;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -23,7 +24,7 @@ public class Render extends ApplicationAdapter {
 	ArrayList<Blob> blobs;
 	Blob blob;
 	OrthographicCamera camera;
-	float lerp = 1.5f; //per rendere fluido il movimento della camera e del blob. Più è alto il valore, più si muove velocemente
+	float lerp = 1.0f; //per rendere fluido il movimento della camera e del blob. Più è alto il valore, più si muove velocemente
 	
 	
 	private int numBlobs = 40;
@@ -31,19 +32,18 @@ public class Render extends ApplicationAdapter {
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //i valori mi dicono lo "zoom della camera".
+		camera.setToOrtho(false, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2); //i valori mi dicono lo "zoom della camera".
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		
-		blob = new Blob(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2, 60);
+		blob = new Blob(Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight()/3, 40);
 		initBlobs();
 	}
 	
 	public void initBlobs() {
 		blobs = new ArrayList<Blob>(numBlobs);
 		for (int i = 0; i < numBlobs; i++) {
-			Blob b = new Blob((int) (Math.random() * Gdx.graphics.getWidth()),(int) (Math.random() * Gdx.graphics.getHeight()),(int) (Math.random() * 20));
-			System.out.println(b.getX());
+			Blob b = new Blob((int) (new Random().nextInt(Gdx.graphics.getWidth())),(int) (new Random().nextInt(Gdx.graphics.getHeight())),(int) (Math.random() * 20));
 			blobs.add(b);
 		}
 	}
@@ -84,5 +84,6 @@ public class Render extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		shapeRenderer.dispose();
 	}
 }
