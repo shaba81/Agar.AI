@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import element.Blob;
 
@@ -21,6 +22,7 @@ public class Render extends ApplicationAdapter {
 	ArrayList<Blob> blobs;
 	Blob blob;
 	OrthographicCamera camera;
+	float lerp = 1.0f; //per rendere fluido il movimento della camera e del blob. Più è alto il valore, più si muove velocemente
 	
 	
 	private int numBlobs = 10;
@@ -45,10 +47,15 @@ public class Render extends ApplicationAdapter {
 		}
 	}
 	
-	public void moveBlob() {
-		blob.setX(Gdx.input.getX());
-		blob.setY(Gdx.graphics.getHeight() - Gdx.input.getY());
-		camera.position.set(blob.getX(), blob.getY(), 0);
+	public void moveBlob() {  //contiene Linear Interpolation per la camera
+		Vector3 position = new Vector3(camera.position);
+		position.x += (Gdx.input.getX() - position.x) * lerp * Gdx.graphics.getDeltaTime();
+		position.y += ((Gdx.graphics.getHeight() - Gdx.input.getY()) - position.y) * lerp * Gdx.graphics.getDeltaTime();
+		
+		blob.setX((int) position.x);
+		blob.setY((int) position.y);
+
+		camera.position.set(position.x, position.y, 0);
 		camera.update();
 	}
 
