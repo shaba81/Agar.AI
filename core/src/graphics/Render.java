@@ -24,7 +24,7 @@ public class Render extends ApplicationAdapter {
 	ArrayList<Blob> blobs;
 	Blob blob;
 	OrthographicCamera camera;
-	float lerp = 1.0f; //per rendere fluido il movimento della camera e del blob. Più è alto il valore, più si muove velocemente
+	float lerp = 0.1f; //per rendere fluido il movimento della camera e del blob. Più è alto il valore, più si muove velocemente
 	
 	
 	private int numBlobs = 40;
@@ -32,23 +32,23 @@ public class Render extends ApplicationAdapter {
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2); //i valori mi dicono lo "zoom della camera".
+		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()); //i valori mi dicono lo "zoom della camera".
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		
-		blob = new Blob(Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight()/3, 40);
+		blob = new Blob(Gdx.graphics.getWidth()/2,Gdx.graphics.getHeight()/2, 40);
 		initBlobs();
 	}
 	
 	public void initBlobs() {
 		blobs = new ArrayList<Blob>(numBlobs);
 		for (int i = 0; i < numBlobs; i++) {
-			Blob b = new Blob((int) (new Random().nextInt(Gdx.graphics.getWidth())),(int) (new Random().nextInt(Gdx.graphics.getHeight())),(int) (Math.random() * 20));
+			Blob b = new Blob((int) (new Random().nextInt(Gdx.graphics.getWidth() * 2)),(int) (new Random().nextInt(Gdx.graphics.getHeight() * 2)),(int) (Math.random() * 20));
 			blobs.add(b);
 		}
 	}
 	
-	public void moveBlob() {  //contiene Linear Interpolation per la camera
+	/*public void moveBlob() {  //contiene Linear Interpolation per la camera
 		Vector3 position = new Vector3(camera.position);
 		position.x += (Gdx.input.getX() - position.x) * lerp * Gdx.graphics.getDeltaTime();
 		position.y += ((Gdx.graphics.getHeight() - Gdx.input.getY()) - position.y) * lerp * Gdx.graphics.getDeltaTime();
@@ -57,6 +57,15 @@ public class Render extends ApplicationAdapter {
 		blob.setY((int) position.y);
 
 		camera.position.set(position.x, position.y, 0);
+		camera.update();
+	}*/
+	
+	public void moveBlob() {
+		Vector2 mouse = new Vector2(Gdx.input.getX(),Gdx.input.getY() - Gdx.graphics.getHeight()/2);
+		mouse.nor();
+		blob.addPos(mouse);
+		
+		camera.position.set(blob.getPosition(), 0);
 		camera.update();
 	}
 
@@ -71,7 +80,7 @@ public class Render extends ApplicationAdapter {
 		
 		moveBlob();
 		
-		shapeRenderer.circle(blob.getX(), blob.getY(), blob.getRadius());
+		shapeRenderer.circle(blob.getPosition().x, blob.getPosition().y, blob.getRadius());
 		
 		for (Blob b : blobs) {
 			shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());

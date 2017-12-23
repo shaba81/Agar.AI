@@ -1,31 +1,35 @@
 package element;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Blob {
 	
-	private int x;
-	private int y;
+	private float x;
+	private float y;
+	Vector2 position;
 	private int radius;
 	
 	
-	public Blob(int x, int y, int radius) {
+	public Blob(float x, float y, int radius) {
 		this.x = x;
 		this.y = y;
+		this.position = new Vector2 (x, y);
 		this.radius = radius;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
@@ -37,6 +41,13 @@ public class Blob {
 		this.radius = radius;
 	}
 	
+	public Vector2 getPosition() {
+		return position;
+	}
+	
+	public void addPos(Vector2 pos) {
+		this.position.add(pos);
+	}
 	
 
 }
