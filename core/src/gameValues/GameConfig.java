@@ -1,9 +1,8 @@
 package gameValues;
 
-public class GameConfig {
-	public int SCREEN_WIDTH = 800;
-	public int SCREEN_HEIGHT = 600;
-	
-	
+import com.badlogic.gdx.Gdx;
 
+public class GameConfig {
+	public static int SCREEN_WIDTH = Gdx.graphics.getWidth();
+	public static int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 }
