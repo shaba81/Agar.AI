@@ -1,10 +1,9 @@
 package graphics;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,7 +15,9 @@ import com.badlogic.gdx.math.Vector2;
 import element.Blob;
 import gameValues.GameConfig;
 
-public class Render extends ApplicationAdapter {
+public class MainGameScreen implements Screen {
+	private AgarAI game;
+	
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
 	private ArrayList<Blob> blobs;
@@ -26,8 +27,9 @@ public class Render extends ApplicationAdapter {
 	//per rendere fluido il movimento della camera e del blob. Pi� � alto il valore, pi� si muove velocemente
 	private int numBlobs = 120;
 	
-	@Override
-	public void create () {
+	public MainGameScreen(AgarAI game) {
+		this.game = game;
+		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT); 
 		//i valori mi dicono lo "zoom della camera".
@@ -48,32 +50,18 @@ public class Render extends ApplicationAdapter {
 		}
 	}
 	
-	/*public void moveBlob() {  //contiene Linear Interpolation per la camera
-		Vector3 position = new Vector3(camera.position);
-		position.x += (Gdx.input.getX() - position.x) * lerp * Gdx.graphics.getDeltaTime();
-		position.y += ((GameConfig.SCREEN_HEIGHT - Gdx.input.getY()) - position.y) * lerp * Gdx.graphics.getDeltaTime();
-		
-		blob.setX((int) position.x);
-		blob.setY((int) position.y);
-
-		camera.position.set(position.x, position.y, 0);
-		camera.update();
-	}*/
-	
 	public void moveBlob() {
 		Vector2 mouse = new Vector2(Gdx.input.getX() - GameConfig.SCREEN_WIDTH/2, 
 				GameConfig.SCREEN_HEIGHT/2 - Gdx.input.getY());
 		
 		mouse.nor();
-//		System.out.println(mouse);
 		blob.addPos(mouse.x*lerp, mouse.y*lerp);
-		
 		camera.position.set(blob.getX(), blob.getY(), 0);
 		camera.update();
 	}
 
 	@Override
-	public void render () {
+	public void render (float delta) {
 		Gdx.gl.glClearColor(Color.BLUE.r,Color.BLUE.g,Color.BLUE.b,Color.BLUE.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
@@ -102,5 +90,35 @@ public class Render extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		shapeRenderer.dispose();
+	}
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
 	}
 }
