@@ -1,19 +1,15 @@
 package element;
 
-import com.badlogic.gdx.math.Vector2;
-
 public class Blob {
 	
 	private float x;
 	private float y;
-	Vector2 position;
 	private int radius;
 	
 	
 	public Blob(float x, float y, int radius) {
 		this.x = x;
 		this.y = y;
-		this.position = new Vector2 (x, y);
 		this.radius = radius;
 	}
 
@@ -41,13 +37,17 @@ public class Blob {
 		this.radius = radius;
 	}
 	
-	public Vector2 getPosition() {
-		return position;
+	public void addPos(float x, float y) {
+		this.x += x;
+		this.y += y;
 	}
 	
-	public void addPos(Vector2 pos) {
-		this.position.add(pos);
+	public boolean checkCollision(Blob blob) { 
+//		System.out.println("this.x " + this.x + " this.radius " + this.radius + " blob.x " + blob.x);
+		if(this.x + this.radius > blob.x && this.x - this.radius < blob.x)
+			if((this.y + this.radius > blob.y) && (this.y - this.radius < blob.y))
+				return true;
+		return false;
 	}
-	
 
 }

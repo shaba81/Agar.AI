@@ -24,7 +24,7 @@ public class Render extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	private float lerp = 2.5f; 
 	//per rendere fluido il movimento della camera e del blob. Pi� � alto il valore, pi� si muove velocemente
-	private int numBlobs = 140;
+	private int numBlobs = 120;
 	
 	@Override
 	public void create () {
@@ -41,9 +41,9 @@ public class Render extends ApplicationAdapter {
 	public void initBlobs() {
 		blobs = new ArrayList<Blob>(numBlobs);
 		for (int i = 0; i < numBlobs; i++) {
-			Blob b = new Blob((int) (new Random().nextInt(GameConfig.SCREEN_WIDTH * 2)),
-					(int) (new Random().nextInt(GameConfig.SCREEN_HEIGHT * 2)),
-					(int) (Math.random() * 20));
+			Blob b = new Blob((int) ((Math.random() * GameConfig.SCREEN_WIDTH * 2)),
+					(int) ((Math.random() * GameConfig.SCREEN_HEIGHT * 2)),
+					(int) (Math.random()*20));
 			blobs.add(b);
 		}
 	}
@@ -66,9 +66,9 @@ public class Render extends ApplicationAdapter {
 		
 		mouse.nor();
 //		System.out.println(mouse);
-		blob.addPos(new Vector2(mouse.x*lerp, mouse.y*lerp));
+		blob.addPos(mouse.x*lerp, mouse.y*lerp);
 		
-		camera.position.set(blob.getPosition(), 0);
+		camera.position.set(blob.getX(), blob.getY(), 0);
 		camera.update();
 	}
 
@@ -82,10 +82,16 @@ public class Render extends ApplicationAdapter {
 		
 		moveBlob();
 		
-		shapeRenderer.circle(blob.getPosition().x, blob.getPosition().y, blob.getRadius());
+		shapeRenderer.circle(blob.getX(), blob.getY(), blob.getRadius());
 		
 		for (Blob b : blobs) {
-			shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
+			if(b.checkCollision(blob)) {System.out.println("collision");
+				shapeRenderer.setColor(Color.RED);
+				shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
+				shapeRenderer.setColor(Color.WHITE);
+			} else {
+				shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
+			}
 		}
 
 		shapeRenderer.end();
