@@ -21,7 +21,6 @@ public class StartScreen implements Screen {
 	public static TextureAtlas texture = new TextureAtlas(Gdx.files.internal("skin/glassy-ui.atlas"));
 	public static Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"), texture);
 	
-	
 	public StartScreen(final AgarAI game) {
 		this.game = game;
 		stage = new Stage();
@@ -41,7 +40,6 @@ public class StartScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-
 	}
 
 	@Override
@@ -56,25 +54,21 @@ public class StartScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

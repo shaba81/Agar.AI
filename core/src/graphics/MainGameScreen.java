@@ -29,14 +29,17 @@ public class MainGameScreen implements Screen {
 	
 	public MainGameScreen(AgarAI game) {
 		this.game = game;
-		
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT); 
-		//i valori mi dicono lo "zoom della camera".
+
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
+		
+		camera = new OrthographicCamera();
+		//i valori mi dicono lo "zoom della camera".
+		camera.setToOrtho(false, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT); 
+
 		shapeRenderer.setColor(Color.WHITE);
 		blob = new Blob(GameConfig.SCREEN_WIDTH/2,GameConfig.SCREEN_HEIGHT/2, 40);
+		
 		initBlobs();
 	}
 	
@@ -56,7 +59,7 @@ public class MainGameScreen implements Screen {
 		
 		mouse.nor();
 		blob.addPos(mouse.x*lerp, mouse.y*lerp);
-		camera.position.set(blob.getX(), blob.getY(), 0);
+		camera.position.set(blob.getX(), blob.getY(), 0); camera.zoom = blob.getRadius()/35f;
 		camera.update();
 	}
 
@@ -72,16 +75,15 @@ public class MainGameScreen implements Screen {
 		
 		shapeRenderer.circle(blob.getX(), blob.getY(), blob.getRadius());
 		
-		for (Blob b : blobs) {
-			if(b.checkCollision(blob)) {System.out.println("collision");
-				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
-				shapeRenderer.setColor(Color.WHITE);
+		for (int i=0; i<blobs.size(); i++) {
+			if(blobs.get(i).checkCollision(blob)) {
+				shapeRenderer.circle(blobs.get(i).getX(), blobs.get(i).getY(), blobs.get(i).getRadius());
+				blob.increment(blobs.get(i).getRadius()/2);
+				blobs.remove(blobs.get(i));
 			} else {
-				shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
+				shapeRenderer.circle(blobs.get(i).getX(), blobs.get(i).getY(), blobs.get(i).getRadius());
 			}
 		}
-
 		shapeRenderer.end();
 		batch.end();
 	}
@@ -95,30 +97,25 @@ public class MainGameScreen implements Screen {
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
 	}
 }
