@@ -7,7 +7,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -20,6 +22,7 @@ public class MainGameScreen implements Screen {
 	
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
+	private TextureRegion background;
 	private ArrayList<Blob> blobs;
 	private Blob blob;
 	private OrthographicCamera camera;
@@ -37,8 +40,10 @@ public class MainGameScreen implements Screen {
 		//i valori mi dicono lo "zoom della camera".
 		camera.setToOrtho(false, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT); 
 
-		shapeRenderer.setColor(Color.WHITE);
+		shapeRenderer.setColor(Color.GREEN);
 		blob = new Blob(GameConfig.SCREEN_WIDTH/2,GameConfig.SCREEN_HEIGHT/2, 40);
+		
+		background = new TextureRegion(new Texture("img/field.png"));
 		
 		initBlobs();
 	}
@@ -65,13 +70,14 @@ public class MainGameScreen implements Screen {
 
 	@Override
 	public void render (float delta) {
-		Gdx.gl.glClearColor(Color.BLUE.r,Color.BLUE.g,Color.BLUE.b,Color.BLUE.a);
+		//Gdx.gl.glClearColor(Color.WHITE.r,Color.WHITE.g,Color.WHITE.b,Color.WHITE.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		
 		moveBlob();
+		batch.draw(background, blob.getX(), blob.getY());
 		
 		shapeRenderer.circle(blob.getX(), blob.getY(), blob.getRadius());
 		
