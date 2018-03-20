@@ -74,8 +74,8 @@ public class Blob {
 				float target = initial + inc;
 				while(radius < target) { 
 					radius += 0.2f; 
-//					System.out.println(this.getName() + " initial: " + initial + 
-//							" current: " + radius + " target: " + target);
+					System.out.println(this.getName() + " initial: " + initial + 
+							" current: " + radius + " target: " + target);
 					try {
 						sleep(100);
 					} catch (InterruptedException e) {
