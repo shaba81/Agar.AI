@@ -3,27 +3,38 @@ package element;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.badlogic.gdx.math.Vector2;
+
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 
-@Id("Blob")
+@Id("blob")
 public class Blob {
 	
 	/* EmbASP integration */
 	@Param(0)
-	private float x;
+	protected int id;
 	@Param(1)
-	private float y;
+	protected float x;
 	@Param(2)
-	private float radius;
+	protected float y;
+	@Param(3)
+	protected float radius;
 	
 	/* Concurrency */
 	Lock l = new ReentrantLock();
 	
-	public Blob(float x, float y, float radius) {
+	public Blob() {}
+	
+	public Blob(int id, float x, float y, float radius) {
+		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	public float getX() {
@@ -84,4 +95,9 @@ public class Blob {
 		return false;
 	}
 
+	
+	public float checkDistance(Blob blob) {
+		return new Vector2(blob.getX(), blob.getY()).dst(x, y);
+	}
+	
 }

@@ -20,6 +20,7 @@ public class StartScreen implements Screen {
 	
 	public static TextureAtlas texture = new TextureAtlas(Gdx.files.internal("skin/glassy-ui.atlas"));
 	public static Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"), texture);
+	public Texture background = new Texture("img/bg.jpg");
 	
 	public StartScreen(final AgarAI game) {
 		this.game = game;
@@ -45,31 +46,23 @@ public class StartScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		batch.begin();
-		batch.draw(new Texture("img/wallpaper.jpg"),0,0);
+		batch.draw(background,0,0);
 		batch.end();
 		stage.act();
 		stage.draw();
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-	}
+	public void resize(int width, int height) {}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-	}
+	public void resume() {}
 
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-	}
+	public void hide() {}
 
 	@Override
 	public void dispose() {
