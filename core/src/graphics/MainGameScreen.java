@@ -1,15 +1,13 @@
 package graphics;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -21,9 +19,8 @@ public class MainGameScreen implements Screen {
 	private AgarAI game;
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
-	private TextureRegion background;
-	private ArrayList<Blob> blobs;
-	private Blob blob;
+//	private Texture background;
+//	private Sprite sprite;
 	private OrthographicCamera camera;
 	private GameManager manager;
 	
@@ -34,14 +31,14 @@ public class MainGameScreen implements Screen {
 
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
-		shapeRenderer.setColor(Color.WHITE);
-		
+		shapeRenderer.setColor(Color.GREEN);
+
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT); 
-
-		shapeRenderer.setColor(Color.GREEN);
 		
-		background = new TextureRegion(new Texture("img/field.png"));
+//		background = new Texture("img/field.png");
+//		sprite = new Sprite(background);
+//		sprite.setSize(GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
 	}
 	
 	public void updatePlayer(Blob actor) {
@@ -62,13 +59,11 @@ public class MainGameScreen implements Screen {
 		manager.manageActors();
 		manager.managePlayer();
 		updatePlayer(manager.getPlayer());
-//		batch.draw(background, blob.getX(), blob.getY());
+		
+//		batch.draw(sprite, 0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
 		
 		for (Blob b : manager.getBlobs().values())
 			shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
-		
-//		System.out.println("player " + new Vector2(player.getX(), player.getY()) + 
-//				" target " + target);
 		
 		shapeRenderer.end();
 		batch.end();

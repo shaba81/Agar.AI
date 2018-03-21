@@ -1,12 +1,23 @@
-%blob(1,1,1,1).
-%blob(2,2,2,1).
-%blob(3,3,3,1).
-%blob(4,4,4,2).
-%blob(5,5,5,5).
-%blob(0,1,1,3).
+%blob(id,x,y,r).
+%actor(id,x,y,r).
+%distance(blob,d).
 
+%Guess
 insegui(B) | nonInsegui(B) :- blob(B,_,_,_).
+
+%Insegui solamente blob più piccoli di te
 :- insegui(B), blob(B,_,_,R1), actor(_,_,_,R2), R1>=R2.
+
+%Insegui esattamente un blob
 :- #count{X:insegui(X)} = Y, Y<>1.
+
+%Predicato di supporto per memorizzare la differenza
+%fra il tuo raggio e i raggi degli altri blob 
 diff(B,D) :- actor(_,_,_,R1), blob(B,_,_,R2), D=R1-R2, D>0.
+
+%Minimizza la differenza tra i raggi 
+%(insegui il più grande fra quelli più piccoli di te)
 :~ insegui(B), diff(B,D). [D@1]
+
+%Minimizza la distanza tra te e l'obiettivo
+:~ insegui(B), distance(B,D). [D@2]

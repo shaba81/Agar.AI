@@ -27,8 +27,8 @@ public class GameManager {
 	/* Game Elements */
 	private HashMap<Integer, Blob> blobs; /* Mappa di blob: id=0 mainplayer; id<0 animated; id>0 inanimated */
 	private float lerp = 2.5f; 
-	private int inanimatedBlobs = 15;
-	private int animatedBlobs = 3;
+	private int inanimatedBlobs = 0;
+	private int animatedBlobs = 8;
 	
 	/* Singleton Instance */
 	private static GameManager instance = null;
@@ -58,12 +58,11 @@ public class GameManager {
 	public void moveBlobMouse() {
 		Vector2 mouse = new Vector2(Gdx.input.getX() - SCREEN_WIDTH/2, 
 				SCREEN_HEIGHT/2 - Gdx.input.getY());
-		
 		mouse.nor();
 		blobs.get(0).addPos(mouse.x*lerp, mouse.y*lerp);
 	}
 	
-	public void moveBlobAI(Blob actor, Vector2 target) {
+	public void moveBlobToTarget(Blob actor, Vector2 target) {
 		float MoveToX = target.x;
         float MoveToY = target.y;
         float diffX = MoveToX - actor.getX();
@@ -92,7 +91,7 @@ public class GameManager {
 	public void manageActors() {
 		for (Blob b : blobs.values()) {
 			if(b.getId() <= 0) {
-				moveBlobAI(b, chooseTarget(b));
+				moveBlobToTarget(b, chooseTarget(b));
 				if(checkCollisions(b)) return;
 			}
 		}
@@ -100,7 +99,7 @@ public class GameManager {
 	
 	public void managePlayer() {
 		if(blobs.get(0)!=null) {
-			moveBlobAI(blobs.get(0), chooseTarget(blobs.get(0)));
+			moveBlobToTarget(blobs.get(0), chooseTarget(blobs.get(0)));
 			if(checkCollisions(blobs.get(0))) return;
 		}
 	}
@@ -109,13 +108,21 @@ public class GameManager {
 		Handler handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
 		InputProgram facts = new ASPInputProgram();
 		try {
+			facts.addProgram("actor(" + actor.getId() + ",\"" + 
+					actor.getX() + "\",\"" + actor.getY() + "\",\"" + 
+						actor.getRadius() + "\").");
 			
-			facts.addProgram("actor(" + actor.getId() + ",\"" + actor.getX() + "\",\"" 
-			+ actor.getY() + "\",\"" + actor.getRadius() + "\").");
+//			facts.addProgram("actor(" + actor.getId() + "," + 
+//					(int)actor.getX() + "," + (int)actor.getY() + "," + 
+//						(int)actor.getRadius() + ").");
 			
 			for (Blob b : blobs.values()) {
 				if(b.getId()!=actor.getId())
 					facts.addObjectInput(b);
+				facts.addProgram("distance(" + b.getId() + ",\"" + 
+					b.checkDistance(actor) + "\").");
+//				facts.addProgram("distance(" + b.getId() + "," + 
+//						(int)b.checkDistance(actor) + ").");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,8 +138,10 @@ public class GameManager {
 		String as = answers.getAnswerSetsString();
 		
 		/* Caso senza blob */
-		if(as.contains("INCONSISTENT"))
+		if(as.contains("INCONSISTENT")) {
+			System.out.println("INCONSISTENT");
 			return new Vector2();
+		}
 		
 		
 		String[] tmp1 = as.split(" ");
