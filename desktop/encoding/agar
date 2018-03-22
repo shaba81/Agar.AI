@@ -2,10 +2,11 @@
 %actor(id,x,y,r).
 %distance(blob,d).
 
-%Guess
-insegui(B) | nonInsegui(B) :- blob(B,_,_,_).
 
-%Insegui solamente blob più piccoli di te
+%Guess
+insegui(B) | scappa(B) | ignora(B) :- blob(B,_,_,_).
+
+%Non è possibile inseguire blob più grandi di te
 :- insegui(B), blob(B,_,_,R1), actor(_,_,_,R2), R1>=R2.
 
 %Insegui esattamente un blob
@@ -13,11 +14,30 @@ insegui(B) | nonInsegui(B) :- blob(B,_,_,_).
 
 %Predicato di supporto per memorizzare la differenza
 %fra il tuo raggio e i raggi degli altri blob 
-diff(B,D) :- actor(_,_,_,R1), blob(B,_,_,R2), D=R1-R2, D>0.
+differenzaConLaPreda(B,D) :- actor(_,_,_,R1), blob(B,_,_,R2), D=R1-R2, D>0.
 
 %Minimizza la differenza tra i raggi 
 %(insegui il più grande fra quelli più piccoli di te)
-:~ insegui(B), diff(B,D). [D@1]
+:~ insegui(B), differenzaConLaPreda(B,D). [D@1]
 
 %Minimizza la distanza tra te e l'obiettivo
 :~ insegui(B), distance(B,D). [D@2]
+
+%Non è possibile scappare da chi è più piccolo di te
+:- scappa(B), blob(B,_,_,R1), actor(_,_,_,R2), R1<=R2.
+
+%Scappa da esattamente un blob
+%:- #count{X:scappa(X)} = Y, Y<>1.
+
+%Predicato di supporto per trovare il blob con il raggio massimo 
+blobMax(B,X) :- #max{R:blob(Y,_,_,R)} = X, blob(B,_,_,X).
+
+%Massimizza il raggio del blob da cui scappare
+%(scappa sempre da quello più grande)
+%:~ scappa(B), blob(B,_,_,R), blobMax(_,X), Y=X-R. [Y@3]
+
+%Minimizza la distanza con il blob da cui scappare
+%(scappa sempre da quello più vicino)
+%:~ scappa(B), distance(B,D). [D@4]
+
+%:- scappa(B1), distance(B1, DS), insegui(B2), distance(B2, IS), DS>IS.

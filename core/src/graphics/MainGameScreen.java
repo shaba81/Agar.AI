@@ -12,17 +12,21 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import element.Blob;
+import gameValues.Constants;
 import gameValues.GameManager;
 
 public class MainGameScreen implements Screen {
-	
+
+	/* Logic Elements */
 	private AgarAI game;
-	private SpriteBatch batch;
-	private ShapeRenderer shapeRenderer;
-//	private Texture background;
-//	private Sprite sprite;
-	private OrthographicCamera camera;
 	private GameManager manager;
+	
+	/* Graphic Elements */
+	private OrthographicCamera camera;
+	private ShapeRenderer shapeRenderer;
+	private SpriteBatch batch;
+	private Texture background;
+	private Sprite sprite;
 	
 	
 	public MainGameScreen(AgarAI game) {
@@ -34,11 +38,11 @@ public class MainGameScreen implements Screen {
 		shapeRenderer.setColor(Color.GREEN);
 
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT); 
+		camera.setToOrtho(false, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT); 
 		
-//		background = new Texture("img/field.png");
-//		sprite = new Sprite(background);
-//		sprite.setSize(GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
+		background = new Texture("img/field.png");
+		sprite = new Sprite(background);
+		sprite.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 	}
 	
 	public void updatePlayer(Blob actor) {
@@ -53,6 +57,8 @@ public class MainGameScreen implements Screen {
 		Gdx.gl.glClearColor(Color.WHITE.r,Color.WHITE.g,Color.WHITE.b,Color.WHITE.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
+		batch.enableBlending();
+		batch.draw(sprite, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		
@@ -60,7 +66,6 @@ public class MainGameScreen implements Screen {
 		manager.managePlayer();
 		updatePlayer(manager.getPlayer());
 		
-//		batch.draw(sprite, 0, 0, GameManager.SCREEN_WIDTH, GameManager.SCREEN_HEIGHT);
 		
 		for (Blob b : manager.getBlobs().values())
 			shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
