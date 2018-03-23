@@ -21,10 +21,10 @@ public class GameManagerDLV {
 	private Handler handler;
 	private InputProgram facts;
 	private InputProgram encoding;
-	private String encodingFile = "encoding/agar";
+	private String encodingFile = "/home/angelo/Documenti/GitHub/Agar.AI/desktop/encoding/agar";
 	
 	public GameManagerDLV() {
-		handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
+		handler = new DesktopHandler(new DLV2DesktopService("/home/angelo/Documenti/GitHub/Agar.AI/desktop/lib/dlv2"));
 		encoding = new ASPInputProgram();
 		facts = new ASPInputProgram();
 	}

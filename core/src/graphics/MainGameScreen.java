@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 import element.Blob;
 import gameValues.Constants;
@@ -23,10 +24,10 @@ public class MainGameScreen implements Screen {
 	
 	/* Graphic Elements */
 	private OrthographicCamera camera;
+	private OrthographicCamera fixedCamera;
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private Texture background;
-	private Sprite sprite;
 	
 	
 	public MainGameScreen(AgarAI game) {
@@ -40,9 +41,11 @@ public class MainGameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT); 
 		
-		background = new Texture("img/field.png");
-		sprite = new Sprite(background);
-		sprite.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+		fixedCamera = new OrthographicCamera();
+		fixedCamera.setToOrtho(false, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+		
+		
+		background = new Texture(Gdx.files.internal("img/field.png"));
 	}
 	
 	public void updatePlayer(Blob actor) {
@@ -55,10 +58,17 @@ public class MainGameScreen implements Screen {
 	@Override
 	public void render (float delta) {
 		Gdx.gl.glClearColor(Color.WHITE.r,Color.WHITE.g,Color.WHITE.b,Color.WHITE.a);
+		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		
 		batch.begin();
+		batch.setProjectionMatrix(fixedCamera.combined);
 		batch.enableBlending();
-		batch.draw(sprite, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+		
+		batch.draw(background, -manager.getPlayer().getX(), -manager.getPlayer().getY(), Constants.SCREEN_WIDTH * 2, Constants.SCREEN_HEIGHT * 2);
+		batch.end();
+		
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		
@@ -71,7 +81,6 @@ public class MainGameScreen implements Screen {
 			shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
 		
 		shapeRenderer.end();
-		batch.end();
 	}
 	
 	@Override
