@@ -26,7 +26,7 @@ public class GameManagerDLV {
 	private String encodingFile = "encoding/scappa&insegui";
 	
 	public GameManagerDLV() {
-		handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
+		handler = new DesktopHandler(new DLV2DesktopService("/home/angelo/Documenti/GitHub/Agar.AI/desktop/lib/dlv2"));
 		encoding = new ASPInputProgram();
 		facts = new ASPInputProgram();
 	}
