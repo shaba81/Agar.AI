@@ -3,6 +3,17 @@
 %distance(blob,d).
 
 
+%actor(0,"755.1045","549.92816",434).
+%blob(-1,"1475.8645","262.26123",18982).
+%distance(-1,1).
+%blob(-2,"1038.606","760.9234",3).
+%distance(-2,353401).
+%blob(-3,"565.9509","928.6614",22719).
+%distance(-3,423341).
+%blob(-4,"1448.4518","257.38705",9972).
+%distance(-4,752536).
+
+
 %Guess
 insegui(B) | scappa(B) | ignora(B) :- blob(B,_,_,_).
 
@@ -23,21 +34,3 @@ differenzaConLaPreda(B,D) :- actor(_,_,_,R1), blob(B,_,_,R2), D=R1-R2, D>0.
 %Minimizza la distanza tra te e l'obiettivo
 :~ insegui(B), distance(B,D). [D@2]
 
-%Non è possibile scappare da chi è più piccolo di te
-:- scappa(B), blob(B,_,_,R1), actor(_,_,_,R2), R1<=R2.
-
-%Scappa da esattamente un blob
-%:- #count{X:scappa(X)} = Y, Y<>1.
-
-%Predicato di supporto per trovare il blob con il raggio massimo 
-blobMax(B,X) :- #max{R:blob(Y,_,_,R)} = X, blob(B,_,_,X).
-
-%Massimizza il raggio del blob da cui scappare
-%(scappa sempre da quello più grande)
-%:~ scappa(B), blob(B,_,_,R), blobMax(_,X), Y=X-R. [Y@3]
-
-%Minimizza la distanza con il blob da cui scappare
-%(scappa sempre da quello più vicino)
-%:~ scappa(B), distance(B,D). [D@4]
-
-%:- scappa(B1), distance(B1, DS), insegui(B2), distance(B2, IS), DS>IS.

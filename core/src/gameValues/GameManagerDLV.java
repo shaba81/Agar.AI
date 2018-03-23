@@ -6,6 +6,8 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 
 import element.Blob;
+import element.Pair;
+
 import it.unical.mat.embasp.base.Handler;
 import it.unical.mat.embasp.base.InputProgram;
 import it.unical.mat.embasp.base.Output;
@@ -21,7 +23,7 @@ public class GameManagerDLV {
 	private Handler handler;
 	private InputProgram facts;
 	private InputProgram encoding;
-	private String encodingFile = "encoding/agar";
+	private String encodingFile = "encoding/scappa&insegui";
 	
 	public GameManagerDLV() {
 		handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
@@ -29,8 +31,8 @@ public class GameManagerDLV {
 		facts = new ASPInputProgram();
 	}
 
-	public Vector2 chooseTarget(Blob actor, HashMap<Integer, Blob> blobs) {
-		System.out.println("++++++++ actor: " + actor.getId());
+	public Pair chooseTarget(Blob actor, HashMap<Integer, Blob> blobs) {
+		System.out.println("++++++++ id_actor: " + actor.getId());
 		try {
 			facts.addProgram("actor(" + actor.getId() + ",\"" + 
 					actor.getX() + "\",\"" + actor.getY() + "\"," + 
@@ -41,9 +43,9 @@ public class GameManagerDLV {
 					facts.addProgram("blob(" + b.getId() + ",\"" + 
 							b.getX() + "\",\"" + b.getY() + "\"," + 
 							toInt(b.getRadius()) + ").");
+					facts.addProgram("distance(" + b.getId() + "," + 
+							toInt(b.checkDistance(actor)) + ").");
 				}
-				facts.addProgram("distance(" + b.getId() + "," + 
-						toInt(b.checkDistance(actor)) + ").");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,7 +65,7 @@ public class GameManagerDLV {
 		List<AnswerSet> answersList = answers.getAnswersets();
 		if(answersList.isEmpty()) {
 			System.out.println("NO ANSWERS");
-			return new Vector2();
+			return new Pair("NO ANSWERS", new Vector2());
 		}
 		
 		AnswerSet a = answersList.get(answersList.size()-1);
@@ -74,16 +76,29 @@ public class GameManagerDLV {
 			System.out.println(string);
 		System.out.println();
 		
-		String sequence = "insegui";
-		int beginSequence = as.indexOf(sequence);
-		int endSequence = beginSequence+sequence.length()+1;
-		String tmp = as.substring(endSequence, as.indexOf(")", endSequence));
-
-		int target = Integer.parseInt(tmp); 
-		
-		if(blobs.containsKey(target))
-			return new Vector2(blobs.get(target).getX(), blobs.get(target).getY());
-		return new Vector2();
+		if(as.contains(Constants.INSEGUI)) {
+			int beginSequence = as.indexOf(Constants.INSEGUI);
+			int endSequence = beginSequence + Constants.INSEGUI.length() + 1;
+			String tmp = as.substring(endSequence, as.indexOf(")", endSequence));
+			
+			int target = Integer.parseInt(tmp); 
+			
+			if(blobs.containsKey(target))
+				return new Pair(Constants.INSEGUI, 
+						new Vector2(blobs.get(target).getX(), blobs.get(target).getY()));
+		}
+		else if(as.contains(Constants.SCAPPA)) {
+			int beginSequence = as.indexOf(Constants.SCAPPA);
+			int endSequence = beginSequence + Constants.SCAPPA.length() + 1;
+			String tmp = as.substring(endSequence, as.indexOf(")", endSequence));
+			
+			int target = Integer.parseInt(tmp); 
+			
+			if(blobs.containsKey(target))
+				return new Pair(Constants.SCAPPA, 
+						new Vector2(blobs.get(target).getX(), blobs.get(target).getY()));
+		}
+		return new Pair(" . ", new Vector2());
 	}
 	
 	public int toInt(float x) {

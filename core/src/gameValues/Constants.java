@@ -9,8 +9,10 @@ public class Constants {
 	public static final int SCREEN_HEIGHT = Gdx.graphics.getHeight();
 	
 	/* Game Constants */
-	public static float lerp = 2.5f; 
-	public static int inanimatedBlobs = 20;
-	public static int animatedBlobs = 0;
+	public static final String INSEGUI = "insegui";
+	public static final String SCAPPA = "scappa";
+	public static final float lerp = 2.5f; 
+	public static final int inanimatedBlobs = 0;
+	public static final int animatedBlobs = 5;
 	
 }

@@ -25,13 +25,11 @@ public class MainGameScreen implements Screen {
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
-	private Texture background;
-	private Sprite sprite;
 	
 	
 	public MainGameScreen(AgarAI game) {
 		this.game = game;
-		manager = GameManager.getInstance();
+		manager = GameManager.getInstance(game);
 
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
@@ -39,10 +37,6 @@ public class MainGameScreen implements Screen {
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT); 
-		
-		background = new Texture("img/field.png");
-		sprite = new Sprite(background);
-		sprite.setSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 	}
 	
 	public void updatePlayer(Blob actor) {
@@ -54,18 +48,15 @@ public class MainGameScreen implements Screen {
 
 	@Override
 	public void render (float delta) {
-		Gdx.gl.glClearColor(Color.WHITE.r,Color.WHITE.g,Color.WHITE.b,Color.WHITE.a);
+//		Gdx.gl.glClearColor(Color.WHITE.r,Color.WHITE.g,Color.WHITE.b,Color.WHITE.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.enableBlending();
-		batch.draw(sprite, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		
 		manager.manageActors();
 		manager.managePlayer();
 		updatePlayer(manager.getPlayer());
-		
 		
 		for (Blob b : manager.getBlobs().values())
 			shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());

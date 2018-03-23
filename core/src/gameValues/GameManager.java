@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import element.Blob;
+import element.Pair;
+import graphics.AgarAI;
 
 public class GameManager {
 	
@@ -16,30 +18,32 @@ public class GameManager {
 	/* Singleton Instance */
 	private static GameManager instance = null;
 	
+	private AgarAI game;
 	private GameManagerDLV dlv;
 	
-	private GameManager() {
+	private GameManager(final AgarAI game) {
 		
+		this.game = game;
 		dlv = new GameManagerDLV();
 		
 		blobs = new HashMap<Integer, Blob>();
 		for (int i = 0; i < Constants.inanimatedBlobs; i++) {
 			Blob b = new Blob(i+1,(float) ((Math.random() * Constants.SCREEN_WIDTH * 2)), 
-					(float) ((Math.random() * Constants.SCREEN_HEIGHT * 2)), (float) (Math.random()*40)); 
+					(float) ((Math.random() * Constants.SCREEN_HEIGHT * 2)), (float) (Math.random()*60)); 
 			blobs.put(b.getId(), b);
 		}
 		for (int i = 0; i < Constants.animatedBlobs; i++) {
 			Blob b = new Blob(-i-1,(float) ((Math.random() * Constants.SCREEN_WIDTH * 2)), 
-					(float) ((Math.random() * Constants.SCREEN_HEIGHT * 2)), (float) (Math.random()*40)); 
+					(float) ((Math.random() * Constants.SCREEN_HEIGHT * 2)), (float) (Math.random()*60)); 
 			blobs.put(b.getId(), b);
 		}
 		Blob p = new Blob(0, Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2, 40);
 		blobs.put(p.getId(), p);
 	}
 	
-	public static GameManager getInstance() {
+	public static GameManager getInstance(AgarAI game) {
 		if(instance == null)
-			instance = new GameManager();
+			instance = new GameManager(game);
 		return instance;
 	}
 	
@@ -65,29 +69,50 @@ public class GameManager {
 		Iterator<Blob> it = blobs.values().iterator();
 		while(it.hasNext() && !removed) {
 			Blob tmp = it.next();
-			if(actor.getId()!=tmp.getId() && tmp.checkCollision(actor)) {
+			if(actor.getId()!=tmp.getId() && tmp.checkCollision(actor))
 				if(actor.getRadius() > tmp.getRadius()) {
+					if(tmp.getId() == 0) {
+						game.changeScreen("game over");
+						return true;
+					}
 					actor.increment(tmp.getRadius()/2);
 					blobs.remove(tmp.getId());
 					removed = true;
 				}
-			}
 		} 
 		return removed;
+	}
+	
+	public void goAway(Blob actor, Vector2 target) { System.out.println("********************SCAPPA");
+		Vector2 posActor = new Vector2(actor.getX(), actor.getY());
+		float angle = posActor.angle(target);
+		posActor.rotate(angle);
+		float dist = /*posActor.dst(target)*/ 5;
+		Vector2 tmp = new Vector2(((float)Math.cos(-angle)+dist),((float)Math.sin(-angle)+dist));
+		tmp.nor();
+		actor.addPos(tmp.x*Constants.lerp, tmp.y*Constants.lerp);
 	}
 	
 	public void manageActors() {
 		for (Blob b : blobs.values()) {
 			if(b.getId() <= 0) {
-				moveBlobToTarget(b, dlv.chooseTarget(b, blobs));
+				Pair p = dlv.chooseTarget(b, blobs);
+				if(p.getLeft().equals(Constants.INSEGUI))
+					moveBlobToTarget(b, p.getRight());
+				else if(p.getLeft().equals(Constants.SCAPPA))
+					goAway(b, p.getRight());
 				if(checkCollisions(b)) return;
 			}
 		}
 	}
 	
 	public void managePlayer() {
-		moveBlobToTarget(blobs.get(0), dlv.chooseTarget(blobs.get(0), blobs));
-		if(checkCollisions(blobs.get(0))) return;
+		Pair p = dlv.chooseTarget(getPlayer(), blobs);
+		if(p.getLeft().equals(Constants.INSEGUI))
+			moveBlobToTarget(getPlayer(), p.getRight());
+		else if(p.getLeft().equals(Constants.SCAPPA))
+			goAway(getPlayer(), p.getRight());
+		if(checkCollisions(getPlayer())) return;
 	}
 	
 	public Blob getPlayer() {
