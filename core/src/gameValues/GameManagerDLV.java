@@ -26,7 +26,7 @@ public class GameManagerDLV {
 	private String encodingFile = "encoding/scappa&insegui";
 	
 	public GameManagerDLV() {
-		handler = new DesktopHandler(new DLV2DesktopService("/home/angelo/Documenti/GitHub/Agar.AI/desktop/lib/dlv2"));
+		handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
 		encoding = new ASPInputProgram();
 		facts = new ASPInputProgram();
 	}
@@ -79,9 +79,9 @@ public class GameManagerDLV {
 		if(as.contains(Constants.INSEGUI)) {
 			int beginSequence = as.indexOf(Constants.INSEGUI);
 			int endSequence = beginSequence + Constants.INSEGUI.length() + 1;
-			String tmp = as.substring(endSequence, as.indexOf(")", endSequence));
+			String id = as.substring(endSequence, as.indexOf(")", endSequence));
 			
-			int target = Integer.parseInt(tmp); 
+			int target = Integer.parseInt(id); 
 			
 			if(blobs.containsKey(target))
 				return new Pair(Constants.INSEGUI, 
@@ -90,9 +90,9 @@ public class GameManagerDLV {
 		else if(as.contains(Constants.SCAPPA)) {
 			int beginSequence = as.indexOf(Constants.SCAPPA);
 			int endSequence = beginSequence + Constants.SCAPPA.length() + 1;
-			String tmp = as.substring(endSequence, as.indexOf(")", endSequence));
+			String id = as.substring(endSequence, as.indexOf(")", endSequence));
 			
-			int target = Integer.parseInt(tmp); 
+			int target = Integer.parseInt(id); 
 			
 			if(blobs.containsKey(target))
 				return new Pair(Constants.SCAPPA, 
