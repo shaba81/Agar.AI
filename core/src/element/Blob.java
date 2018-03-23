@@ -62,8 +62,8 @@ public class Blob {
 	}
 	
 	public void addPos(float x, float y) {
-		this.x += x;
-		this.y += y;
+		this.x += x * Math.pow(radius*2, -0.5);
+		this.y += y * Math.pow(radius*2, -0.5);
 	}
 	
 	public void increment(final float inc) {
@@ -86,7 +86,6 @@ public class Blob {
 	}
 	
 	public boolean checkCollision(Blob blob) { 
-//		System.out.println("this.x " + this.x + " this.radius " + this.radius + " blob.x " + blob.x);
 		if(this.x + this.radius > blob.x && this.x - this.radius < blob.x)
 			if((this.y + this.radius > blob.y) && (this.y - this.radius < blob.y))
 				return true;

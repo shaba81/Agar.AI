@@ -44,7 +44,6 @@ public class MainGameScreen implements Screen {
 		fixedCamera = new OrthographicCamera();
 		fixedCamera.setToOrtho(false, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		
-		
 		background = new Texture(Gdx.files.internal("img/field.png"));
 	}
 	
@@ -66,14 +65,21 @@ public class MainGameScreen implements Screen {
 		batch.setProjectionMatrix(fixedCamera.combined);
 		batch.enableBlending();
 		
-		batch.draw(background, -manager.getPlayer().getX(), -manager.getPlayer().getY(), Constants.SCREEN_WIDTH * 2, Constants.SCREEN_HEIGHT * 2);
+		batch.draw(background, -manager.getPlayer().getX(), -manager.getPlayer().getY(), 
+				Constants.SCREEN_WIDTH * 2, Constants.SCREEN_HEIGHT * 2);
 		batch.end();
 		
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		
+		if(Constants.isHumanPlayer) {
+			manager.moveWithMouse();
+			manager.checkCollisions(manager.getPlayer());
+		} else {
+			manager.managePlayer();
+		}
+		
 		manager.manageActors();
-		manager.managePlayer();
 		updatePlayer(manager.getPlayer());
 		
 		for (Blob b : manager.getBlobs().values())

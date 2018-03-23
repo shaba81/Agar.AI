@@ -47,7 +47,7 @@ public class GameManager {
 		return instance;
 	}
 	
-	public void moveBlobMouse() {
+	public void moveWithMouse() {
 		Vector2 mouse = new Vector2(Gdx.input.getX() - Constants.SCREEN_WIDTH/2, 
 				Constants.SCREEN_HEIGHT/2 - Gdx.input.getY());
 		mouse.nor();
@@ -83,19 +83,20 @@ public class GameManager {
 		return removed;
 	}
 	
-	public void goAway(Blob actor, Vector2 target) { System.out.println("********************SCAPPA");
-		Vector2 posActor = new Vector2(actor.getX(), actor.getY());
-		float angle = posActor.angle(target);
-		posActor.rotate(angle);
-		float dist = /*posActor.dst(target)*/ 5;
-		Vector2 tmp = new Vector2(((float)Math.cos(-angle)+dist),((float)Math.sin(-angle)+dist));
-		tmp.nor();
-		actor.addPos(tmp.x*Constants.lerp, tmp.y*Constants.lerp);
+	public void goAway(Blob actor, Vector2 target) { 
+		System.out.println("********************SCAPPA*********************");
+		float MoveToX = target.x;
+	    float MoveToY = target.y;
+	    float diffX = MoveToX - actor.getX();
+	    float diffY = MoveToY - actor.getY();
+	    float angle = (float)Math.atan2(diffY, diffX);
+		actor.addPos(-(float)Math.cos(angle)*Constants.lerp, 
+				-(float)Math.sin(angle)*Constants.lerp);
 	}
 	
 	public void manageActors() {
 		for (Blob b : blobs.values()) {
-			if(b.getId() <= 0) {
+			if(b.getId() < 0) {
 				Pair p = dlv.chooseTarget(b, blobs);
 				if(p.getLeft().equals(Constants.INSEGUI))
 					moveBlobToTarget(b, p.getRight());
