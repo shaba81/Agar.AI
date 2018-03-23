@@ -32,8 +32,5 @@ blobMax(B,X) :- #max{R:blob(Y,_,_,R)} = X, blob(B,_,_,X).
 %Non è possibile inseguire e scappare contemporaneamente
 :- #count{X:scappa(X)} = X1, #count{Y:insegui(Y)} = Y1, Z=X1+Y1, Z<>1.
 
-
 %Pagando il prezzo della distanza allo stesso livello (3) sia con le prede
 %che con i predatori, si deciderà se scappare o inseguire il blob più vicino 
-
-
