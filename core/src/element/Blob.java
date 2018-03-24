@@ -5,6 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.badlogic.gdx.math.Vector2;
 
+import gameValues.Constants;
 import it.unical.mat.embasp.languages.Id;
 import it.unical.mat.embasp.languages.Param;
 
@@ -62,8 +63,13 @@ public class Blob {
 	}
 	
 	public void addPos(float x, float y) {
-		this.x += x * Math.pow(radius*2, -0.5);
-		this.y += y * Math.pow(radius*2, -0.5);
+		double speed = Math.pow(radius*2, -0.5);
+		if((this.x + x*speed)>-(Constants.fieldDimX)/2 &&
+				(this.x + x*speed)<(Constants.fieldDimX)/2)
+			this.x += x * speed;
+		if((this.x + y*speed)>-(Constants.fieldDimY)/2 &&
+				(this.y + y*speed)<(Constants.fieldDimY)/2)
+			this.y += y * speed;
 	}
 	
 	public void increment(final float inc) {

@@ -29,7 +29,6 @@ public class MainGameScreen implements Screen {
 	private SpriteBatch batch;
 	private Texture background;
 	
-	
 	public MainGameScreen(AgarAI game) {
 		this.game = game;
 		manager = GameManager.getInstance(game);
@@ -44,12 +43,12 @@ public class MainGameScreen implements Screen {
 		fixedCamera = new OrthographicCamera();
 		fixedCamera.setToOrtho(false, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		
-		background = new Texture(Gdx.files.internal("img/field.png"));
+		background = new Texture(Gdx.files.internal("img/matrix.png"));
 	}
 	
 	public void updatePlayer(Blob actor) {
 		shapeRenderer.circle(actor.getX(), actor.getY(), actor.getRadius());
-		camera.position.set(actor.getX(), actor.getY(), 0); 
+		camera.position.set(actor.getX(), actor.getY(), 0);  System.out.println("player " + camera.position);
 		camera.zoom = actor.getRadius()/35f;
 		camera.update();
 	}
@@ -62,11 +61,10 @@ public class MainGameScreen implements Screen {
 		
 		
 		batch.begin();
-		batch.setProjectionMatrix(fixedCamera.combined);
 		batch.enableBlending();
-		
 		batch.draw(background, -manager.getPlayer().getX(), -manager.getPlayer().getY(), 
-				Constants.SCREEN_WIDTH * 2, Constants.SCREEN_HEIGHT * 2);
+				Constants.fieldDimX, Constants.fieldDimY);
+		batch.setProjectionMatrix(fixedCamera.combined);
 		batch.end();
 		
 		shapeRenderer.begin(ShapeType.Filled);
@@ -92,6 +90,7 @@ public class MainGameScreen implements Screen {
 	public void dispose () {
 		batch.dispose();
 		shapeRenderer.dispose();
+		background.dispose();
 	}
 
 	@Override
