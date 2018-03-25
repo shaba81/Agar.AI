@@ -27,18 +27,20 @@ public class GameManager {
 		dlv = new GameManagerDLV();
 		
 		blobs = new HashMap<Integer, Blob>();
+		
 		for (int i = 0; i < Constants.inanimatedBlobs; i++) {
-			Blob b = new Blob(i+1,(float) ((Math.random() * Constants.SCREEN_WIDTH * 2)), 
-					(float) ((Math.random() * Constants.SCREEN_HEIGHT * 2)), (float) (Math.random()*60)); 
+			Blob b = new Blob();
+			b.setRandomBlob(i+1);
 			blobs.put(b.getId(), b);
 		}
 		for (int i = 0; i < Constants.animatedBlobs; i++) {
-			Blob b = new Blob(-i-1,(float) ((Math.random() * Constants.SCREEN_WIDTH * 2)), 
-					(float) ((Math.random() * Constants.SCREEN_HEIGHT * 2)), (float) (Math.random()*60)); 
+			Blob b = new Blob();
+			b.setRandomBlob(-i-1);
 			blobs.put(b.getId(), b);
 		}
-		Blob p = new Blob(0, Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2, 40);
-		blobs.put(p.getId(), p);
+		
+		Blob player = new Blob(0, Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2, 40);
+		blobs.put(player.getId(), player);
 	}
 	
 	public static GameManager getInstance(AgarAI game) {

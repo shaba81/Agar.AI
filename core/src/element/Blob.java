@@ -34,6 +34,12 @@ public class Blob {
 		this.radius = radius;
 	}
 	
+	public void setRandomBlob(int id) {
+		this.id = id;
+		this.radius = (float) (Math.random() * 20);
+		setRandomPosition();
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -62,13 +68,20 @@ public class Blob {
 		this.radius = radius;
 	}
 	
+	public void setRandomPosition() {
+		float xTmp = (float) ((Math.random() * Constants.fieldDim/2) - Constants.fieldDim/2);
+		float yTmp = (float) ((Math.random() * Constants.fieldDim/2) - Constants.fieldDim/2);
+		setX(xTmp);
+		setY(yTmp);
+	}
+	
 	public void addPos(float x, float y) {
 		double speed = Math.pow(radius*2, -0.5);
-		if((this.x + x*speed)>-(Constants.fieldDimX)/2 &&
-				(this.x + x*speed)<(Constants.fieldDimX)/2)
+		if((this.x + x*speed)>-(Constants.fieldDim)/2 &&
+				(this.x + x*speed)<(Constants.fieldDim)/2)
 			this.x += x * speed;
-		if((this.x + y*speed)>-(Constants.fieldDimY)/2 &&
-				(this.y + y*speed)<(Constants.fieldDimY)/2)
+		if((this.y + y*speed)>-(Constants.fieldDim)/2 &&
+				(this.y + y*speed)<(Constants.fieldDim)/2)
 			this.y += y * speed;
 	}
 	

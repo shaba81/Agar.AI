@@ -10,10 +10,9 @@ public abstract class Constants {
 	public static final String INSEGUI = "insegui";
 	public static final String SCAPPA = "scappa";
 	public static final float lerp = 25f; 
-	public static final int inanimatedBlobs = 15;
+	public static final int inanimatedBlobs = 20;
 	public static final int animatedBlobs = 0;
-	public static boolean isHumanPlayer = true;
-	public static final int fieldDimX = 10000;
-	public static final int fieldDimY = 10000;
+	public static boolean isHumanPlayer = false;
+	public static final int fieldDim = 2000;
 	
 }

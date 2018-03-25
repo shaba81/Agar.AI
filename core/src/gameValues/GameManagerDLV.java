@@ -32,7 +32,7 @@ public class GameManagerDLV {
 	}
 
 	public Pair chooseTarget(Blob actor, HashMap<Integer, Blob> blobs) {
-		System.out.println("++++++++ id_actor: " + actor.getId());
+//		System.out.println("++++++++ id_actor: " + actor.getId());
 		try {
 			facts.addProgram("actor(" + actor.getId() + ",\"" + 
 					actor.getX() + "\",\"" + actor.getY() + "\"," + 
@@ -71,10 +71,10 @@ public class GameManagerDLV {
 		AnswerSet a = answersList.get(answersList.size()-1);
 		String as = a.toString();
 		
-		String[] tmp1 = as.split(" ");
-		for (String string : tmp1)
-			System.out.println(string);
-		System.out.println();
+//		String[] tmp1 = as.split(" ");
+//		for (String string : tmp1)
+//			System.out.println(string);
+//		System.out.println();
 		
 		if(as.contains(Constants.INSEGUI)) {
 			int beginSequence = as.indexOf(Constants.INSEGUI);
