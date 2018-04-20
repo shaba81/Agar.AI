@@ -36,14 +36,16 @@ public class Blob {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
-		this.target = new Pair(Constants.INSEGUI, new Vector2().setToRandomDirection());
+		this.target = new Pair(Constants.INSEGUI, new Vector2((float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim),
+				(float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim)));
 		this.color = color;
 	}
 	
 	public void setRandomBlob(int id) {
 		this.id = id;
 		this.radius = (float) (Math.random() * 20) + 5;
-		this.target = new Pair(Constants.INSEGUI, new Vector2());
+		this.target = new Pair(Constants.INSEGUI, new Vector2((float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim),
+				(float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim)));
 		setRandomPosition();
 	}
 	
@@ -137,6 +139,7 @@ public class Blob {
 			vertical = false;
 		}
 		
+		/* Check corners */
 		if(horizontal && vertical) {
 			if(this.x > 0 && this.y > 0) { 
 				//System.out.println("topright");

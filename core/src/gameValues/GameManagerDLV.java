@@ -26,8 +26,6 @@ public class GameManagerDLV {
 	private InputProgram encoding;
 	private String encodingFile = "encoding/scappa&insegui";
 	
-	private Lock lock = new ReentrantLock();
-	
 	public GameManagerDLV() {
 		handler = new DesktopHandler(new DLV2DesktopService("lib/dlv2"));
 		encoding = new ASPInputProgram();
@@ -35,9 +33,7 @@ public class GameManagerDLV {
 	}
 
 	public Pair chooseTarget(Blob actor, HashMap<Integer, Blob> blobs) {
-//		System.out.println("++++++++ id_actor: " + actor.getId());
 		try {
-			lock.lock();
 			facts.addProgram("actor(" + actor.getId() + ",\"" + 
 					actor.getX() + "\",\"" + actor.getY() + "\"," + 
 						toInt(actor.getRadius()) + ").");
@@ -101,8 +97,6 @@ public class GameManagerDLV {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			lock.unlock();
 		}
 		return new Pair(" . ", new Vector2());
 	}

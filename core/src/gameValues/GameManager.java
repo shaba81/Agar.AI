@@ -2,13 +2,14 @@ package gameValues;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import element.Blob;
-import element.Pair;
 import graphics.AgarAI;
 
 public class GameManager {
@@ -22,8 +23,9 @@ public class GameManager {
 	private AgarAI game;
 	private GameManagerDLV dlv;
 	
+	private Lock lock = new ReentrantLock();
+	
 	private GameManager(final AgarAI game) {
-		
 		this.game = game;
 		dlv = new GameManagerDLV();
 		
@@ -80,24 +82,44 @@ public class GameManager {
 	}
 	
 	public void manageActors() {
-		for (Blob b : blobs.values()) {
-			if(b.getId() < 0) {
-				b.setTarget(dlv.chooseTarget(b, blobs));
-				if(checkCollisions(b)) return;
+		try {
+			lock.lock();
+			for (Blob b : blobs.values()) {
+				if(b.getId() < 0) {
+					b.setTarget(dlv.chooseTarget(b, blobs));
+					if(checkCollisions(b)) return;
+				}
 			}
+		} finally {
+			lock.unlock();
 		}
 	}
 	
 	public void managePlayer() {
-		blobs.get(0).setTarget(dlv.chooseTarget(getPlayer(), blobs));
-		if(checkCollisions(getPlayer())) return;
+		try {
+			lock.lock();
+			blobs.get(0).setTarget(dlv.chooseTarget(getPlayer(), blobs));
+			if(checkCollisions(getPlayer())) return;
+		} finally {
+			lock.unlock();
+		}
 	}
 	
 	public Blob getPlayer() {
-		return blobs.get(0);
+		try {
+			lock.lock();
+			return blobs.get(0);
+		} finally {
+			lock.unlock();
+		}
 	}
 	
 	public HashMap<Integer, Blob> getBlobs(){
-		return blobs;
+		try {
+			lock.lock();
+			return blobs;
+		} finally {
+			lock.unlock();
+		}
 	}
 }

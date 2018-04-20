@@ -13,7 +13,7 @@ public abstract class Constants {
 	public static final String INSEGUI = "insegui";
 	public static final String SCAPPA = "scappa";
 	public static final float lerp = 25f; 
-	public static int inanimatedBlobs = 5;
+	public static int inanimatedBlobs = 0;
 	public static int animatedBlobs = 20;
 	public static boolean isHumanPlayer = true;
 	public static final int fieldDim = 2000;

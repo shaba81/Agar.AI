@@ -1,6 +1,7 @@
 package graphics;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,6 +25,7 @@ public class MainGameScreen implements Screen {
 	private AgarAI game;
 	private GameManager gameManager;
 	private BlobManager blobManager;
+	private boolean pause;
  
 	/* Graphic Elements */
 	private OrthographicCamera camera;
@@ -38,6 +40,7 @@ public class MainGameScreen implements Screen {
 		this.game = game;
 		gameManager = GameManager.getInstance(game);
 		blobManager = new BlobManager(game);
+		pause = false;
 
 		shapeRenderer = new ShapeRenderer();
 		spritebatch = new SpriteBatch();
@@ -63,28 +66,35 @@ public class MainGameScreen implements Screen {
 
 	@Override
 	public void render(float delta) { 
+		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+			pause = !pause;
+
 		Gdx.gl.glClearColor(Color.WHITE.r, Color.WHITE.g, Color.WHITE.b, Color.WHITE.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+		
 		shapeRenderer.begin(ShapeType.Filled); 
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		stageMap.act(delta);
 		stageMap.draw();
 		
-		if (Constants.isHumanPlayer) {
-			gameManager.moveWithMouse();
-			gameManager.checkCollisions(gameManager.getPlayer());
-		} else {
-			gameManager.managePlayer();
-		}
-
-		updatePlayer(gameManager.getPlayer());
-
 		for (Blob b : gameManager.getBlobs().values()) {
-			if(!(b.getId() == 0 && Constants.isHumanPlayer))
-				b.move();
 			shapeRenderer.setColor(b.getColor()); 
 			shapeRenderer.circle(b.getX(), b.getY(), b.getRadius());
+		}
+		
+		if(!pause) {
+			updatePlayer(gameManager.getPlayer());
+
+			if (Constants.isHumanPlayer) {
+				gameManager.moveWithMouse();
+				gameManager.checkCollisions(gameManager.getPlayer());
+			} else {
+				gameManager.managePlayer();
+			}
+	
+			for (Blob b : gameManager.getBlobs().values())
+				if(!(b.getId() == 0 && Constants.isHumanPlayer))
+					b.move();
 		}
 		shapeRenderer.end();
 	}
@@ -92,6 +102,8 @@ public class MainGameScreen implements Screen {
 	@Override
 	public void dispose() {
 		shapeRenderer.dispose();
+		stageMap.dispose();
+		mapTexture.dispose();
 	}
 
 	@Override
