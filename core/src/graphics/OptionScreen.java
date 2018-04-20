@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import gameValues.Constants;
 
@@ -49,7 +48,6 @@ public class OptionScreen implements Screen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Constants.isHumanPlayer = !Constants.isHumanPlayer;
-				System.out.println(Constants.isHumanPlayer);
 			}
 		});
 
@@ -60,13 +58,10 @@ public class OptionScreen implements Screen {
 		sliderAn.setPosition(350, 650);
 		sliderAn.setValue(Constants.animatedBlobs);
 		sliderAn.addListener(new ChangeListener() {
-
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Constants.animatedBlobs = (int) sliderAn.getValue();
-				System.out.println(Constants.animatedBlobs);
 				animatedBlobs.setText("Animated Blobs: " + Constants.animatedBlobs);
-
 			}
 		});
 
@@ -78,13 +73,10 @@ public class OptionScreen implements Screen {
 		sliderIn.setPosition(350, 750);
 		sliderIn.setValue(Constants.inanimatedBlobs);
 		sliderIn.addListener(new ChangeListener() {
-
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				Constants.inanimatedBlobs = (int) sliderIn.getValue();
-				System.out.println(Constants.inanimatedBlobs);
 				inanimatedBlobs.setText("Inanimated Blobs: " + Constants.inanimatedBlobs);
-
 			}
 		});
 
@@ -96,9 +88,6 @@ public class OptionScreen implements Screen {
 				game.changeScreen("start");
 			}
 		});
-
-
-		
 		
 //		stage.addActor(human);
 //		stage.addActor(animatedBlobs);
@@ -122,9 +111,7 @@ public class OptionScreen implements Screen {
 
 	@Override
 	public void show() {
-
 		Gdx.input.setInputProcessor(stage);
-
 	}
 
 	@Override
@@ -139,33 +126,23 @@ public class OptionScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
 		stage.dispose();
-
 	}
-
 }

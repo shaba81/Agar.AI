@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import element.Blob;
@@ -31,15 +32,17 @@ public class GameManager {
 		for (int i = 0; i < Constants.inanimatedBlobs; i++) {
 			Blob b = new Blob();
 			b.setRandomBlob(i+1);
+			b.setColor(Constants.colors[i%Constants.colors.length]);
 			blobs.put(b.getId(), b);
 		}
 		for (int i = 0; i < Constants.animatedBlobs; i++) {
 			Blob b = new Blob();
 			b.setRandomBlob(-i-1);
+			b.setColor(Constants.colors[i%Constants.colors.length]);
 			blobs.put(b.getId(), b);
 		}
 		
-		Blob player = new Blob(0, Constants.SCREEN_WIDTH/2, Constants.SCREEN_HEIGHT/2, 40);
+		Blob player = new Blob(0, 0, 0, 20, Color.RED);
 		blobs.put(player.getId(), player);
 	}
 	
@@ -56,19 +59,10 @@ public class GameManager {
 		blobs.get(0).addPos(mouse.x*Constants.lerp, mouse.y*Constants.lerp);
 	}
 	
-	public void moveBlobToTarget(Blob actor, Vector2 target) {
-		float MoveToX = target.x;
-        float MoveToY = target.y;
-        float diffX = MoveToX - actor.getX();
-        float diffY = MoveToY - actor.getY();
-        float angle = (float)Math.atan2(diffY, diffX);
-		actor.addPos((float)Math.cos(angle)*Constants.lerp, 
-				(float)Math.sin(angle)*Constants.lerp);
-	}
-	
 	public boolean checkCollisions(Blob actor) {
 		boolean removed = false;
 		Iterator<Blob> it = blobs.values().iterator();
+		
 		while(it.hasNext() && !removed) {
 			Blob tmp = it.next();
 			if(actor.getId()!=tmp.getId() && tmp.checkCollision(actor))
@@ -85,36 +79,17 @@ public class GameManager {
 		return removed;
 	}
 	
-	public void goAway(Blob actor, Vector2 target) { 
-		System.out.println("********************SCAPPA*********************");
-		float MoveToX = target.x;
-	    float MoveToY = target.y;
-	    float diffX = MoveToX - actor.getX();
-	    float diffY = MoveToY - actor.getY();
-	    float angle = (float)Math.atan2(diffY, diffX);
-		actor.addPos(-(float)Math.cos(angle)*Constants.lerp, 
-				-(float)Math.sin(angle)*Constants.lerp);
-	}
-	
 	public void manageActors() {
 		for (Blob b : blobs.values()) {
 			if(b.getId() < 0) {
-				Pair p = dlv.chooseTarget(b, blobs);
-				if(p.getLeft().equals(Constants.INSEGUI))
-					moveBlobToTarget(b, p.getRight());
-				else if(p.getLeft().equals(Constants.SCAPPA))
-					goAway(b, p.getRight());
+				b.setTarget(dlv.chooseTarget(b, blobs));
 				if(checkCollisions(b)) return;
 			}
 		}
 	}
 	
 	public void managePlayer() {
-		Pair p = dlv.chooseTarget(getPlayer(), blobs);
-		if(p.getLeft().equals(Constants.INSEGUI))
-			moveBlobToTarget(getPlayer(), p.getRight());
-		else if(p.getLeft().equals(Constants.SCAPPA))
-			goAway(getPlayer(), p.getRight());
+		blobs.get(0).setTarget(dlv.chooseTarget(getPlayer(), blobs));
 		if(checkCollisions(getPlayer())) return;
 	}
 	

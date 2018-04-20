@@ -12,7 +12,6 @@ public class DesktopLauncher {
 		config.title = "Agar.AI";
 		config.width = Constants.SCREEN_WIDTH;
 		config.height = Constants.SCREEN_HEIGHT;
-//		config.fullscreen = true;
 		new LwjglApplication(new AgarAI(), config);
 	}
 }
