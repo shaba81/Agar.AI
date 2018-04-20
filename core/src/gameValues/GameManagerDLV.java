@@ -2,8 +2,6 @@ package gameValues;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import com.badlogic.gdx.math.Vector2;
 

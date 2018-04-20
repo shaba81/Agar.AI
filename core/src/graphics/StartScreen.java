@@ -12,14 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import gameValues.Constants;
+
 public class StartScreen implements Screen {
 	
 	AgarAI game;
 	Stage stage;
 	SpriteBatch batch;
 	
-	public static TextureAtlas texture = new TextureAtlas(Gdx.files.internal("skin/glassy-ui.atlas"));
-	public static Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"), texture);
 	public Texture background = new Texture("img/bg.jpg");
 	
 	public StartScreen(final AgarAI game) {
@@ -27,7 +27,7 @@ public class StartScreen implements Screen {
 		stage = new Stage();
 		batch = new SpriteBatch();
 		
-		Button button = new TextButton("Start", skin);
+		Button button = new TextButton("Start", Constants.skin);
 		button.setPosition(350, 350);
 		button.addListener(new ChangeListener() {
 			@Override
@@ -37,7 +37,7 @@ public class StartScreen implements Screen {
 		});
 		stage.addActor(button);
 		
-		Button options = new TextButton("Options", skin);
+		Button options = new TextButton("Options", Constants.skin);
 		options.setPosition(350, 150);
 		options.addListener(new ChangeListener() {
 			@Override

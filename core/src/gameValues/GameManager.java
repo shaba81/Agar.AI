@@ -22,6 +22,7 @@ public class GameManager {
 	
 	private AgarAI game;
 	private GameManagerDLV dlv;
+//	private boolean round = false;
 	
 	private Lock lock = new ReentrantLock();
 	
@@ -34,7 +35,7 @@ public class GameManager {
 		for (int i = 0; i < Constants.inanimatedBlobs; i++) {
 			Blob b = new Blob();
 			b.setRandomBlob(i+1);
-			b.setColor(Constants.colors[i%Constants.colors.length]);
+			b.setColor(Color.VIOLET);
 			blobs.put(b.getId(), b);
 		}
 		for (int i = 0; i < Constants.animatedBlobs; i++) {
@@ -52,6 +53,17 @@ public class GameManager {
 		if(instance == null)
 			instance = new GameManager(game);
 		return instance;
+	}
+	
+	public void addBlob() {
+		try {
+			lock.lock();
+			Blob newBlob = new Blob();
+			newBlob.setRandomBlob(-Constants.animatedBlobs++);
+			blobs.put(newBlob.getId(), newBlob);
+		} finally { System.out.println("ADD***************************************");
+			lock.unlock();
+		}
 	}
 	
 	public void moveWithMouse() {
@@ -84,6 +96,24 @@ public class GameManager {
 	public void manageActors() {
 		try {
 			lock.lock();
+//			ArrayList<Blob> bb = new ArrayList<Blob>(blobs.values()); 
+//			if(round) {
+//				for(int i=0; i<bb.size()/2; i++) {
+//					Blob b = bb.get(i);
+//					if(b.getId() < 0) {
+//						b.setTarget(dlv.chooseTarget(b, blobs));
+//						if(checkCollisions(b)) return;
+//					}
+//				}
+//			} else {
+//				for(int i=bb.size()/2; i<bb.size(); i++) {
+//					Blob b = bb.get(i);
+//					if(b.getId() < 0) {
+//						b.setTarget(dlv.chooseTarget(b, blobs));
+//						if(checkCollisions(b)) return;
+//					}
+//				}
+//			}
 			for (Blob b : blobs.values()) {
 				if(b.getId() < 0) {
 					b.setTarget(dlv.chooseTarget(b, blobs));
@@ -91,6 +121,8 @@ public class GameManager {
 				}
 			}
 		} finally {
+			System.out.println("Blobs: " + blobs.size());
+//			round = !round;
 			lock.unlock();
 		}
 	}

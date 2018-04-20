@@ -36,7 +36,8 @@ public class Blob {
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
-		this.target = new Pair(Constants.INSEGUI, new Vector2((float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim),
+		this.target = new Pair(Constants.INSEGUI, 
+				new Vector2((float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim),
 				(float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim)));
 		this.color = color;
 	}
@@ -44,8 +45,10 @@ public class Blob {
 	public void setRandomBlob(int id) {
 		this.id = id;
 		this.radius = (float) (Math.random() * 20) + 5;
-		this.target = new Pair(Constants.INSEGUI, new Vector2((float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim),
+		this.target = new Pair(Constants.INSEGUI, 
+				new Vector2((float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim),
 				(float) ((Math.random()*Constants.fieldDim*2)-Constants.fieldDim)));
+		this.color = Constants.colors[Math.abs(this.id)%Constants.colors.length];
 		setRandomPosition();
 	}
 	

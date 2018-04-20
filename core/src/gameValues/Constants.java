@@ -1,9 +1,16 @@
 package gameValues;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public abstract class Constants {
+	
+	/* Graphic Constants */
+	public static TextureAtlas texture = new TextureAtlas(Gdx.files.internal("skin/glassy-ui.atlas"));
+	public static Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"), texture);
 
 	/* Screen Constants */
 	public static final int SCREEN_WIDTH = 1000;
@@ -13,9 +20,9 @@ public abstract class Constants {
 	public static final String INSEGUI = "insegui";
 	public static final String SCAPPA = "scappa";
 	public static final float lerp = 25f; 
-	public static int inanimatedBlobs = 0;
-	public static int animatedBlobs = 20;
-	public static boolean isHumanPlayer = true;
+	public static int inanimatedBlobs = 10;
+	public static int animatedBlobs = 5;
+	public static boolean isHumanPlayer = false;
 	public static final int fieldDim = 2000;
 	
 	/* Field Corners */
@@ -26,16 +33,9 @@ public abstract class Constants {
 	
 	/* Colors */
 	public static final Color[] colors = {
-			Color.BLUE,
-			Color.RED,
-			Color.YELLOW,
-			Color.GREEN,
-			Color.ORANGE,
-			Color.BROWN,
-			Color.LIME,
-			Color.CYAN,
-			Color.MAGENTA,
-			Color.PINK,
-			Color.NAVY
+			Color.BLUE,	Color.RED, Color.YELLOW,
+			Color.GREEN, Color.ORANGE, Color.BROWN,
+			Color.LIME,	Color.CYAN,	Color.MAGENTA,
+			Color.PINK,	Color.NAVY
 	};
 }
