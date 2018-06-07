@@ -19,9 +19,10 @@ public abstract class Constants {
 	/* Game Constants */
 	public static final String INSEGUI = "insegui";
 	public static final String SCAPPA = "scappa";
+	public static final String ALLONTANATI = "allontanatiDalBordo";
 	public static final float lerp = 25f; 
 	public static int inanimatedBlobs = 10;
-	public static int animatedBlobs = 5;
+	public static int animatedBlobs =10;
 	public static boolean isHumanPlayer = false;
 	public static final int fieldDim = 2000;
 	
@@ -30,6 +31,11 @@ public abstract class Constants {
 	public static final Vector2 bottomRight = new Vector2(fieldDim/2, -fieldDim/2);
 	public static final Vector2 topLeft = new Vector2(-fieldDim/2, fieldDim/2);
 	public static final Vector2 bottomLeft = new Vector2(-fieldDim/2, -fieldDim/2);
+	
+	public static final float top = fieldDim/2;
+	public static final float bottom = -fieldDim/2;
+	public static final float right = fieldDim/2;
+	public static final float left = -fieldDim/2;
 	
 	/* Colors */
 	public static final Color[] colors = {

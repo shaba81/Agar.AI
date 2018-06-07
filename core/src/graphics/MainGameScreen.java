@@ -101,10 +101,10 @@ public class MainGameScreen implements Screen {
 		}
 
 		if(!pause) {
-			if(timer > 1 && gameManager.getBlobs().size() < 10) {
-				gameManager.addBlob();
-				timer = 0;
-			}
+//			if(timer > 1 /*&& gameManager.getBlobs().size() < 10*/) {
+//				gameManager.addBlob();
+//				timer = 0;
+//			}
 
 			updatePlayer(gameManager.getPlayer());
 

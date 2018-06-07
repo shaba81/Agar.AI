@@ -1,0 +1,36 @@
+%Guess
+insegui(B) | scappa(B) | ignora(B) :- blob(B,_,_,_).
+
+%Non è possibile inseguire blob più grandi di te
+:- insegui(B), blob(B,_,_,R1), actor(_,_,_,R2), R1>=R2.
+
+%Predicato di supporto per memorizzare la differenza
+%fra il tuo raggio e i raggi degli altri blob 
+differenzaConLaPreda(B,D) :- actor(_,_,_,R1), blob(B,_,_,R2), D=R1-R2, D>0.
+
+%Minimizza la differenza tra i raggi 
+%(insegui il più grande fra quelli più piccoli di te)
+:~ insegui(B), differenzaConLaPreda(B,D). [D@1]
+
+%Minimizza la distanza tra te e l'obiettivo
+:~ insegui(B), distance(B,D). [D@3]
+
+%Non è possibile scappare da chi è più piccolo di te
+:- scappa(B), blob(B,_,_,R1), actor(_,_,_,R2), R1<=R2.
+
+%Predicato di supporto per trovare il blob con il raggio massimo 
+blobMax(B,X) :- #max{R:blob(Y,_,_,R)} = X, blob(B,_,_,X).
+
+%Massimizza il raggio del blob da cui scappare
+%(scappa sempre da quello più grande)
+:~ scappa(B), blob(B,_,_,R), blobMax(_,X), Y=X-R. [Y@2]
+
+%Minimizza la distanza con il blob da cui scappare
+%(scappa sempre da quello più vicino)
+:~ scappa(B), distance(B,D). [D@3]
+
+%Non è possibile inseguire e scappare contemporaneamente
+:- #count{X:scappa(X)} = X1, #count{Y:insegui(Y)} = Y1, Z=X1+Y1, Z<>1.
+
+%Pagando il prezzo della distanza allo stesso livello (3) sia con le prede
+%che con i predatori, si deciderà se scappare o inseguire il blob più vicino 

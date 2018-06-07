@@ -1,3 +1,4 @@
+
 %Guess
 insegui(B) | scappa(B) | ignora(B) :- blob(B,_,_,_).
 
@@ -10,10 +11,10 @@ differenzaConLaPreda(B,D) :- actor(_,_,_,R1), blob(B,_,_,R2), D=R1-R2, D>0.
 
 %Minimizza la differenza tra i raggi 
 %(insegui il più grande fra quelli più piccoli di te)
-:~ insegui(B), differenzaConLaPreda(B,D). [D@1]
+:~ insegui(B), differenzaConLaPreda(B,D). [D@1,B]
 
 %Minimizza la distanza tra te e l'obiettivo
-:~ insegui(B), distance(B,D). [D@3]
+:~ insegui(B), distance(B,D). [D@3,B]
 
 %Non è possibile scappare da chi è più piccolo di te
 :- scappa(B), blob(B,_,_,R1), actor(_,_,_,R2), R1<=R2.
@@ -23,14 +24,29 @@ blobMax(B,X) :- #max{R:blob(Y,_,_,R)} = X, blob(B,_,_,X).
 
 %Massimizza il raggio del blob da cui scappare
 %(scappa sempre da quello più grande)
-:~ scappa(B), blob(B,_,_,R), blobMax(_,X), Y=X-R. [Y@2]
+:~ scappa(B), blob(B,_,_,R), blobMax(_,X), Y=X-R. [Y@2,B]
 
 %Minimizza la distanza con il blob da cui scappare
 %(scappa sempre da quello più vicino)
-:~ scappa(B), distance(B,D). [D@3]
+:~ scappa(B), distance(B,D). [D@3,B]
 
-%Non è possibile inseguire e scappare contemporaneamente
-:- #count{X:scappa(X)} = X1, #count{Y:insegui(Y)} = Y1, Z=X1+Y1, Z<>1.
+%Minimizza la distanza tra te e il bordo
+%(Allontanati dal bordo più vicino)
+allontanatiDalBordo(X) | nonAllontanartiDalBordo(X) :- bordo(X).
+:~ allontanatiDalBordo(X), distanzaDalBordo(X, D). [D@3,X]
 
-%Pagando il prezzo della distanza allo stesso livello (3) sia con le prede
-%che con i predatori, si deciderà se scappare o inseguire il blob più vicino 
+%Consiglia due possibili direzioni, in base al bordo da cui allontanarsi.
+direzioneConsigliata("top") :- allontanatiDalBordo("right").
+direzioneConsigliata("bottom") :- allontanatiDalBordo("right").
+direzioneConsigliata("right") :- allontanatiDalBordo("top").
+direzioneConsigliata("left") :- allontanatiDalBordo("top").
+direzioneConsigliata("top") :- allontanatiDalBordo("left").
+direzioneConsigliata("bottom") :- allontanatiDalBordo("left").
+direzioneConsigliata("right") :- allontanatiDalBordo("bottom").
+direzioneConsigliata("left") :- allontanatiDalBordo("bottom").
+
+%Indica la miglior direzione in base alla distanza dal borso corrispondente
+bordoPiuLontano(X) :- #max{D:distanzaDalBordo(B,D), direzioneConsigliata(B)} = MAXDIST, distanzaDalBordo(X,MAXDIST).
+
+%E' possibile avere un solo obiettivo
+:- #count{X:scappa(X)} = X1, #count{Y:insegui(Y)} = Y1, #count{W:allontanatiDalBordo(W)} = W1, K=X1+Y1+W1, K<>1.

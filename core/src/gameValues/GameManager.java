@@ -7,7 +7,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import element.Blob;
 import graphics.AgarAI;
@@ -96,24 +98,6 @@ public class GameManager {
 	public void manageActors() {
 		try {
 			lock.lock();
-//			ArrayList<Blob> bb = new ArrayList<Blob>(blobs.values()); 
-//			if(round) {
-//				for(int i=0; i<bb.size()/2; i++) {
-//					Blob b = bb.get(i);
-//					if(b.getId() < 0) {
-//						b.setTarget(dlv.chooseTarget(b, blobs));
-//						if(checkCollisions(b)) return;
-//					}
-//				}
-//			} else {
-//				for(int i=bb.size()/2; i<bb.size(); i++) {
-//					Blob b = bb.get(i);
-//					if(b.getId() < 0) {
-//						b.setTarget(dlv.chooseTarget(b, blobs));
-//						if(checkCollisions(b)) return;
-//					}
-//				}
-//			}
 			for (Blob b : blobs.values()) {
 				if(b.getId() < 0) {
 					b.setTarget(dlv.chooseTarget(b, blobs));
@@ -122,7 +106,6 @@ public class GameManager {
 			}
 		} finally {
 			System.out.println("Blobs: " + blobs.size());
-//			round = !round;
 			lock.unlock();
 		}
 	}

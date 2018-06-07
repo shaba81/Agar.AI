@@ -91,6 +91,10 @@ public class Blob {
 	public void setTarget(Pair target) {
 		this.target = target;
 	}
+
+	public Pair getTarget() {
+		return target;
+	}
 	
 	public void setRandomPosition() {
 		float xTmp = (float) ((Math.random() * Constants.fieldDim/2) - Constants.fieldDim/2);
@@ -128,51 +132,17 @@ public class Blob {
 	
 	public void addPos(float x, float y) {
 		double speed = Math.pow(radius*2, -0.5);
-		boolean vertical=true, horizontal=true;
 		
 		if((this.x + x*speed)>=-(Constants.fieldDim)/2 &&
 				(this.x + x*speed)<=(Constants.fieldDim)/2) {
 			this.x += x * speed;
-			horizontal = false;
 		}
 		
 		if((this.y + y*speed)>=-(Constants.fieldDim)/2 &&
 				(this.y + y*speed)<=(Constants.fieldDim)/2) {
 			this.y += y * speed;
-			vertical = false;
 		}
 		
-		/* Check corners */
-		if(horizontal && vertical) {
-			if(this.x > 0 && this.y > 0) { 
-				//System.out.println("topright");
-				if(Math.abs(x) > Math.abs(y))
-					target = new Pair(Constants.INSEGUI, Constants.bottomRight);
-				else if(Math.abs(x) <= Math.abs(y)) 
-					target = new Pair(Constants.INSEGUI, Constants.topLeft);
-			}
-			else if(this.x > 0 && this.y < 0) { 
-				//System.out.println("bottomright");
-				if(Math.abs(x) > Math.abs(y))
-					target = new Pair(Constants.INSEGUI, Constants.bottomLeft);
-				else if(Math.abs(x) <= Math.abs(y))
-					target = new Pair(Constants.INSEGUI, Constants.topRight);
-			}
-			else if(this.x < 0 && this.y > 0) { 
-				//System.out.println("topleft");
-				if(Math.abs(x) > Math.abs(y))
-					target = new Pair(Constants.INSEGUI, Constants.bottomLeft);
-				else if(Math.abs(x) <= Math.abs(y))
-					target = new Pair(Constants.INSEGUI, Constants.topRight);
-			}
-			else if(this.x < 0 && this.y < 0) {
-				//System.out.println("bottomleft");
-				if(Math.abs(x) > Math.abs(y))
-					target = new Pair(Constants.INSEGUI, Constants.topLeft);
-				else if(Math.abs(x) <= Math.abs(y))
-					target = new Pair(Constants.INSEGUI, Constants.bottomRight);
-			}
-		}
 	}
 	
 	public void increment(final float inc) {
@@ -195,8 +165,7 @@ public class Blob {
 	}
 	
 	public boolean checkCollision(Blob blob) { 
-		if((this.x + this.radius > blob.x) && (this.x - this.radius < blob.x))
-			if((this.y + this.radius > blob.y) && (this.y - this.radius < blob.y))
+		if(new Vector2(this.x, this.y).dst(new Vector2(blob.x, blob.y)) < this.radius + blob.radius)
 				return true;
 		return false;
 	}
@@ -205,5 +174,5 @@ public class Blob {
 	public float checkDistance(Blob blob) {
 		return new Vector2(blob.getX(), blob.getY()).dst(x, y);
 	}
-	
+
 }
